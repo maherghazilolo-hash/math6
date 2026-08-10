@@ -1,0 +1,399 @@
+<html lang="ar" dir="rtl"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصتي التعليمية التفاعلية المخصصة</title>
+    <style>
+        :root { --bg-color: #0f172a; --text-main: #f8fafc; }
+        body { font-family: 'Tahoma', sans-serif; background: linear-gradient(135deg, #1e1b4b, #0f172a); color: var(--text-main); margin: 0; padding: 15px; min-height: 100vh; box-sizing: border-box; }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        .top-bar { display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.85); backdrop-filter: blur(10px); padding: 12px 18px; border-radius: 16px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; box-shadow: 0 8px 32px rgba(0,0,0,0.3); flex-wrap: wrap; gap: 10px; }
+        .admin-login-btn { background: #475569; color: white; border: none; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; transition: background 0.2s; }
+        .admin-login-btn.active { background: #10b981; }
+
+        .reset-storage-btn { background: #ef4444; color: white; border: none; padding: 10px 14px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 0.85rem; width: 100%; margin-bottom: 15px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
+
+        .login-box-mobile { background: rgba(15, 23, 42, 0.95); padding: 15px; border-radius: 12px; border: 1px solid #475569; margin-bottom: 20px; display: none; gap: 8px; align-items: center; width: 100%; box-sizing: border-box; }
+        .login-box-mobile input { padding: 8px 12px; background: #1e293b; border: 1px solid #64748b; color: white; border-radius: 8px; flex-grow: 1; font-size: 0.9rem; }
+        .login-box-mobile button { padding: 8px 15px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        .big-card { 
+            border-radius: 20px; padding: 22px 20px; margin-bottom: 16px; cursor: pointer; color: white; 
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); display: flex; flex-direction: column; align-items: center; text-align: center; 
+            transition: transform 0.2s ease, box-shadow 0.2s ease; border: 1px solid rgba(255,255,255,0.2); width: 100%; box-sizing: border-box;
+            position: relative;
+        }
+        .big-card:active { transform: scale(0.98); }
+
+        .gradient-1 { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .gradient-2 { background: linear-gradient(135deg, #10b981, #047857); }
+        .gradient-3 { background: linear-gradient(135deg, #f59e0b, #b45309); }
+        .gradient-4 { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+        .gradient-5 { background: linear-gradient(135deg, #ec4899, #be185d); }
+        .gradient-6 { background: linear-gradient(135deg, #06b6d4, #0e7490); }
+
+        .card-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .card-subtitle { font-size: 0.9rem; opacity: 0.95; }
+
+        .admin-action-row { display: flex; gap: 8px; margin-top: 12px; width: 100%; justify-content: center; }
+        .delete-btn-card { background: rgba(0,0,0,0.4); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: bold; }
+
+        .back-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255,255,255,0.3); color: white; font-weight: bold; cursor: pointer; margin-bottom: 15px; font-size: 0.95rem; padding: 8px 16px; border-radius: 10px; backdrop-filter: blur(5px); }
+        
+        .admin-panel { background: rgba(30, 41, 59, 0.95); padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); color: #fff; }
+        .admin-panel input, .admin-panel textarea { width: 100%; padding: 12px; margin: 6px 0 14px 0; background: #0f172a; border: 1px solid #475569; color: #fff; border-radius: 10px; box-sizing: border-box; font-family: inherit; font-size: 0.95rem; }
+        .admin-panel textarea { height: 180px; direction: ltr; text-align: left; font-family: monospace; font-size: 0.9rem; }
+
+        .admin-btn { background: #10b981; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1rem; margin-bottom: 8px; }
+        .export-btn { background: #2563eb; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1rem; }
+        
+        .header-title-box { background: linear-gradient(135deg, #4f46e5, #7c3aed); padding: 25px; border-radius: 20px; text-align: center; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4); color: white; }
+        .header-title-box h2 { margin: 0 0 5px 0; font-size: 1.5rem; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        .header-title-box p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+
+        .code-viewer-container { width: 100%; height: 650px; background: white; border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+    </style>
+</head>
+<body>
+
+<div class="container" id="app">
+            <div class="top-bar">
+                <span>وضع العرض: <strong>🔓 وضع الإدارة (مفعل)</strong></span>
+                <button class="admin-login-btn active" onclick="toggleAdminLogin()">
+                    خروج من الإدارة 🔒
+                </button>
+            </div>
+            
+            <div class="login-box-mobile" style="display: none;">
+                <input type="password" id="mobile-admin-pass" placeholder="أدخل كلمة المرور (1234)">
+                <button onclick="verifyMobilePassword()">دخول</button>
+            </div>
+        <button class="reset-storage-btn" onclick="resetStorageData()">🔄 إعادة ضبط المصنع (مسح الذاكرة التالفة)</button>
+                <button class="back-btn" onclick="currentView='chaptersList'; render();">← عودة لقائمة الفصول</button>
+                <div class="header-title-box">
+                    <h2>الاعداد الصحيحة</h2>
+                    <p>اختر الموضوع البرمجي أو التفاعلي للبدء</p>
+                </div>
+                        <div class="big-card gradient-1" onclick="selTopic=0; currentView='viewTopic'; render();">
+                            <div class="card-title">💻 تمثيل الاعداد الصحيحة علعى مستقيم الاعداد</div>
+                            <div class="card-subtitle">اضغط لتشغيل صفحة الكود التفاعلي</div>
+                            <div class="admin-action-row" onclick="event.stopPropagation()">
+                                <button class="delete-btn-card" style="background:#f59e0b;" onclick="startEditTopic(0)">تعديل الموضوع</button>
+                                <button class="delete-btn-card" onclick="deleteTopic(0)">حذف الموضوع</button>
+                            </div></div>
+                    <div class="admin-panel">
+                        <h3>➕ إضافة موضوع جديد بكود HTML مخصص</h3>
+                        <input id="form-top-name" value="" placeholder="عنوان الموضوع (مثلاً: شرح وتدريب جمع الكسور)">
+                        <textarea id="form-top-code" placeholder="الصق كود الـ HTML / CSS / JS الكامل هنا..."></textarea>
+                        <button class="admin-btn" onclick="saveTopicForm()">إضافة الموضوع للفصل</button>
+                        
+                        <button class="export-btn" onclick="exportFile()">📥 تصدير الكود المحدث بالكامل كملف HTML</button>
+                    </div></div>
+
+<script>
+    // دوال تشفير وفك تشفير الآدمية لحماية الأكواد على الموبايل من التلف
+    function safeBtoa(str) {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+            return String.fromCharCode('0x' + p1);
+        }));
+    }
+
+    function safeAtob(b64Str) {
+        try {
+            return decodeURIComponent(atob(b64Str).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        } catch(e) {
+            return b64Str; // إذا لم يكن مشفراً، يُعاد كما هو للاستبدال الآمن
+        }
+    }
+
+    let sampleHtml = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Tahoma; background: #f0fdf4; padding: 25px; text-align: center; }
+  .box { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+  button { padding: 10px 20px; margin: 8px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; }
+  button:hover { background: #059669; }
+</style>
+</head>
+<body>
+    <div class="box">
+        <h3>اختبار تجريبي سريع</h3>
+        <p>ما هي نتيجة: 5 × 5 ؟</p>
+        <button onclick="alert('إجابة صحيحة أحسنت! 🌟')">25</button>
+        <button onclick="alert('حاول مرة أخرى!')">20</button>
+    </div>
+</body>
+</html>`;
+
+    let defaultPlatformData = [
+    {
+        "name": "الاعداد الصحيحة",
+        "topics": [
+            {
+                "topName": "تمثيل الاعداد الصحيحة علعى مستقيم الاعداد",
+                "htmlCode": "PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImFyIiBkaXI9InJ0bCI+CjxoZWFkPgogICAgPG1ldGEgY2hhcnNldD0iVVRGLTgiPgogICAgPG1ldGEgbmFtZT0idmlld3BvcnQiIGNvbnRlbnQ9IndpZHRoPWRldmljZS13aWR0aCwgaW5pdGlhbC1zY2FsZT0xLjAiPgogICAgPHRpdGxlPtmE2LnYqNipINiu2Lcg2KfZhNij2LnYr9in2K8g2KfZhNi12K3Zitit2Kk8L3RpdGxlPgogICAgPHN0eWxlPgogICAgICAgIGJvZHkgewogICAgICAgICAgICBmb250LWZhbWlseTogJ1NlZ29lIFVJJywgVGFob21hLCBHZW5ldmEsIFZlcmRhbmEsIHNhbnMtc2VyaWY7CiAgICAgICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgICAgICAgICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KDEzNWRlZywgIzY2N2VlYSAwJSwgIzc2NGJhMiAxMDAlKTsKICAgICAgICAgICAgbWFyZ2luOiAwOwogICAgICAgICAgICBwYWRkaW5nOiAyMHB4OwogICAgICAgICAgICBtaW4taGVpZ2h0OiAxMDB2aDsKICAgICAgICAgICAgZGlzcGxheTogZmxleDsKICAgICAgICAgICAganVzdGlmeS1jb250ZW50OiBjZW50ZXI7CiAgICAgICAgICAgIGFsaWduLWl0ZW1zOiBjZW50ZXI7CiAgICAgICAgfQogICAgICAgIC5jb250YWluZXIgewogICAgICAgICAgICBiYWNrZ3JvdW5kOiByZ2JhKDI1NSwgMjU1LCAyNTUsIDAuOTUpOwogICAgICAgICAgICBiYWNrZHJvcC1maWx0ZXI6IGJsdXIoMTBweCk7CiAgICAgICAgICAgIHBhZGRpbmc6IDMwcHg7CiAgICAgICAgICAgIGJvcmRlci1yYWRpdXM6IDIwcHg7CiAgICAgICAgICAgIGJveC1zaGFkb3c6IDAgMTVweCAzNXB4IHJnYmEoMCwwLDAsMC4yKTsKICAgICAgICAgICAgbWF4LXdpZHRoOiA3MDBweDsKICAgICAgICAgICAgd2lkdGg6IDEwMCU7CiAgICAgICAgfQogICAgICAgIGgxIHsgCiAgICAgICAgICAgIGNvbG9yOiAjNGEwZTRlOyAKICAgICAgICAgICAgZm9udC1zaXplOiAxLjhyZW07IAogICAgICAgICAgICBtYXJnaW4tYm90dG9tOiA1cHg7CiAgICAgICAgICAgIHRleHQtc2hhZG93OiAxcHggMXB4IDJweCByZ2JhKDAsMCwwLDAuMDUpOwogICAgICAgIH0KICAgICAgICBwIHsKICAgICAgICAgICAgY29sb3I6ICM2NjY7CiAgICAgICAgICAgIGZvbnQtc2l6ZTogMC45NXJlbTsKICAgICAgICAgICAgbWFyZ2luLWJvdHRvbTogMjBweDsKICAgICAgICB9CiAgICAgICAgLnRhcmdldC1ib3ggewogICAgICAgICAgICBiYWNrZ3JvdW5kOiBsaW5lYXItZ3JhZGllbnQoMTM1ZGVnLCAjZmY5YTllIDAlLCAjZmVjZmVmIDk5JSwgI2ZlY2ZlZiAxMDAlKTsKICAgICAgICAgICAgYm9yZGVyOiAycHggc29saWQgI2ZmNmI4MTsKICAgICAgICAgICAgcGFkZGluZzogMTVweDsKICAgICAgICAgICAgZm9udC1zaXplOiAxLjJyZW07CiAgICAgICAgICAgIGZvbnQtd2VpZ2h0OiBib2xkOwogICAgICAgICAgICBib3JkZXItcmFkaXVzOiAxMnB4OwogICAgICAgICAgICBtYXJnaW4tYm90dG9tOiAyMHB4OwogICAgICAgICAgICBjb2xvcjogI2Q2MzAzMTsKICAgICAgICAgICAgYm94LXNoYWRvdzogMCA0cHggMTVweCByZ2JhKDI1NSwgMTA3LCAxMjksIDAuMik7CiAgICAgICAgfQogICAgICAgIC50YXJnZXQtbnVtIHsKICAgICAgICAgICAgZm9udC1zaXplOiAxLjhyZW07CiAgICAgICAgICAgIGNvbG9yOiAjZmZmOwogICAgICAgICAgICBiYWNrZ3JvdW5kOiAjZmY0NzU3OwogICAgICAgICAgICBwYWRkaW5nOiAycHggMTZweDsKICAgICAgICAgICAgYm9yZGVyLXJhZGl1czogOHB4OwogICAgICAgICAgICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7CiAgICAgICAgICAgIGJveC1zaGFkb3c6IDAgNHB4IDEwcHggcmdiYSgyNTUsIDcxLCA4NywgMC40KTsKICAgICAgICB9CiAgICAgICAgY2FudmFzIHsKICAgICAgICAgICAgYmFja2dyb3VuZC1jb2xvcjogI2ZmZmZmZjsKICAgICAgICAgICAgYm9yZGVyOiAzcHggc29saWQgI2RmZTRlYTsKICAgICAgICAgICAgYm9yZGVyLXJhZGl1czogMTVweDsKICAgICAgICAgICAgZGlzcGxheTogYmxvY2s7CiAgICAgICAgICAgIG1hcmdpbjogMjBweCBhdXRvOwogICAgICAgICAgICBtYXgtd2lkdGg6IDEwMCU7CiAgICAgICAgICAgIGJveC1zaGFkb3c6IDAgOHB4IDIwcHggcmdiYSgwLDAsMCwwLjA2KTsKICAgICAgICAgICAgY3Vyc29yOiBwb2ludGVyOwogICAgICAgICAgICB0cmFuc2l0aW9uOiBhbGwgMC4zcyBlYXNlOwogICAgICAgIH0KICAgICAgICBjYW52YXM6aG92ZXIgewogICAgICAgICAgICBib3JkZXItY29sb3I6ICNhMjliZmU7CiAgICAgICAgfQogICAgICAgIC5zY29yZSB7CiAgICAgICAgICAgIGZvbnQtc2l6ZTogMS4ycmVtOwogICAgICAgICAgICBmb250LXdlaWdodDogYm9sZDsKICAgICAgICAgICAgY29sb3I6ICMwMGI4OTQ7CiAgICAgICAgICAgIG1hcmdpbjogMTVweCAwOwogICAgICAgICAgICBiYWNrZ3JvdW5kOiAjZTNmYWZjOwogICAgICAgICAgICBwYWRkaW5nOiA4cHg7CiAgICAgICAgICAgIGJvcmRlci1yYWRpdXM6IDhweDsKICAgICAgICAgICAgZGlzcGxheTogaW5saW5lLWJsb2NrOwogICAgICAgICAgICBib3JkZXI6IDFweCBkYXNoZWQgIzAwY2VjOTsKICAgICAgICB9CiAgICAgICAgYnV0dG9uIHsKICAgICAgICAgICAgcGFkZGluZzogMTJweCAzMHB4OwogICAgICAgICAgICBmb250LXNpemU6IDEuMXJlbTsKICAgICAgICAgICAgZm9udC13ZWlnaHQ6IGJvbGQ7CiAgICAgICAgICAgIGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCgxMzVkZWcsICMwMGIwOWIsICM5NmM5M2QpOwogICAgICAgICAgICBjb2xvcjogd2hpdGU7CiAgICAgICAgICAgIGJvcmRlcjogbm9uZTsKICAgICAgICAgICAgYm9yZGVyLXJhZGl1czogMzBweDsKICAgICAgICAgICAgY3Vyc29yOiBwb2ludGVyOwogICAgICAgICAgICBib3gtc2hhZG93OiAwIDVweCAxNXB4IHJnYmEoMCwgMTc2LCAxNTUsIDAuNCk7CiAgICAgICAgICAgIHRyYW5zaXRpb246IGFsbCAwLjJzIGVhc2U7CiAgICAgICAgfQogICAgICAgIGJ1dHRvbjpob3ZlciB7IAogICAgICAgICAgICB0cmFuc2Zvcm06IHRyYW5zbGF0ZVkoLTJweCk7CiAgICAgICAgICAgIGJveC1zaGFkb3c6IDAgN3B4IDIwcHggcmdiYSgwLCAxNzYsIDE1NSwgMC42KTsKICAgICAgICB9CiAgICAgICAgYnV0dG9uOmFjdGl2ZSB7CiAgICAgICAgICAgIHRyYW5zZm9ybTogdHJhbnNsYXRlWSgxcHgpOwogICAgICAgIH0KICAgIDwvc3R5bGU+CjwvaGVhZD4KPGJvZHk+Cgo8ZGl2IGNsYXNzPSJjb250YWluZXIiPgogICAgPGgxPtiq2YXYq9mK2YQg2KfZhNin2LnYr9in2K8g2KfZhNi12K3Zitit2Kkg2LnZhNmJINiu2Lcg2KfZhNij2LnYr9in2K8gIPCfjq48L2gxPgogICAgPHA+2KfYtti62Lcg2KjYp9mE2YHYo9ix2Kkg2KPZiCDYqNmE2YXYsyDYp9mE2LTYp9i02Kkg2LnZhNmJINin2YTZhdmI2YLYuSDYp9mE2LXYrdmK2K0g2YTZhNix2YLZhSDYp9mE2YXYt9mE2YjYqDwvcD4KICAgIAogICAgPGRpdiBjbGFzcz0idGFyZ2V0LWJveCIgaWQ9ImJveENvbnRlbnQiPgogICAgICAgINin2YTZhdi32YTZiNioINiq2K3Yr9mK2K8g2KfZhNix2YLZhTogPHNwYW4gY2xhc3M9InRhcmdldC1udW0iIGlkPSJjdXJyZW50VGFzayI+LS08L3NwYW4+CiAgICA8L2Rpdj4KICAgIAogICAgPGNhbnZhcyBpZD0iZ2FtZUNhbnZhcyIgd2lkdGg9IjY1MCIgaGVpZ2h0PSIxNjAiPjwvY2FudmFzPgogICAgCiAgICA8ZGl2PgogICAgICAgIDxkaXYgY2xhc3M9InNjb3JlIiBpZD0ic2NvcmVUZXh0Ij7Yp9mE2YbZgtin2Lc6IDAgLyA0PC9kaXY+CiAgICA8L2Rpdj4KICAgIDxicj4KICAgIDxidXR0b24gb25jbGljaz0iaW5pdEdhbWUoKSI+2KzZiNmE2Kkg2KzYr9mK2K/YqSDwn5SEPC9idXR0b24+CjwvZGl2PgoKPHNjcmlwdD4KY29uc3QgY2FudmFzID0gZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoJ2dhbWVDYW52YXMnKTsKY29uc3QgY3R4ID0gY2FudmFzLmdldENvbnRleHQoJzJkJyk7Cgpjb25zdCBtaW5WYWwgPSAtMTE7CmNvbnN0IG1heFZhbCA9IDExOwpjb25zdCBwYWRkaW5nID0gNDU7CmNvbnN0IGNlbnRlclkgPSA3NTsKCmxldCBudW1iZXJzVG9Bc2sgPSBbXTsKbGV0IGN1cnJlbnRUYXJnZXRJbmRleCA9IDA7CmxldCBzY29yZSA9IDA7CmxldCBwbGFjZWROdW1iZXJzID0gW107CgpmdW5jdGlvbiBkcmF3KCkgewogICAgY3R4LmZpbGxTdHlsZSA9ICIjZmZmZmZmIjsKICAgIGN0eC5maWxsUmVjdCgwLCAwLCBjYW52YXMud2lkdGgsIGNhbnZhcy5oZWlnaHQpOwogICAgCiAgICBjb25zdCB3aWR0aCA9IGNhbnZhcy53aWR0aDsKICAgIGNvbnN0IHN0YXJ0WCA9IHBhZGRpbmc7CiAgICBjb25zdCBlbmRYID0gd2lkdGggLSBwYWRkaW5nOwogICAgCiAgICAvLyDYrti3INin2YTYo9i52K/Yp9ivINin2YTYsdim2YrYs9mKINio2KrYtdmF2YrZhSDYrNiw2KfYqAogICAgY3R4LnN0cm9rZVN0eWxlID0gJyMyZDM0MzYnOwogICAgY3R4LmxpbmVXaWR0aCA9IDU7CiAgICBjdHgubGluZUNhcCA9ICdyb3VuZCc7CiAgICBjdHguYmVnaW5QYXRoKCk7CiAgICBjdHgubW92ZVRvKHN0YXJ0WCwgY2VudGVyWSk7CiAgICBjdHgubGluZVRvKGVuZFgsIGNlbnRlclkpOwogICAgY3R4LnN0cm9rZSgpOwogICAgCiAgICAvLyDYsdik2YjYsyDYp9mE2KPYs9mH2YUKICAgIGN0eC5maWxsU3R5bGUgPSAnIzJkMzQzNic7CiAgICBjdHguYmVnaW5QYXRoKCk7CiAgICBjdHgubW92ZVRvKGVuZFgsIGNlbnRlclkpOyBjdHgubGluZVRvKGVuZFggLSAxMiwgY2VudGVyWSAtIDcpOyBjdHgubGluZVRvKGVuZFggLSAxMiwgY2VudGVyWSArIDcpOyBjdHguZmlsbCgpOwogICAgY3R4LmJlZ2luUGF0aCgpOwogICAgY3R4Lm1vdmVUbyhzdGFydFgsIGNlbnRlclkpOyBjdHgubGluZVRvKHN0YXJ0WCArIDEyLCBjZW50ZXJZIC0gNyk7IGN0eC5saW5lVG8oc3RhcnRYICsgMTIsIGNlbnRlclkgKyA3KTsgY3R4LmZpbGwoKTsKICAgIAogICAgY29uc3QgdG90YWxTdGVwcyA9IG1heFZhbCAtIG1pblZhbDsKICAgIGNvbnN0IHN0ZXBMZW5ndGggPSAoZW5kWCAtIHN0YXJ0WCkgLyB0b3RhbFN0ZXBzOwogICAgCiAgICBmb3IgKGxldCBpID0gMDsgaSA8PSB0b3RhbFN0ZXBzOyBpKyspIHsKICAgICAgICBjb25zdCBjdXJyZW50TnVtID0gbWluVmFsICsgaTsKICAgICAgICBjb25zdCB4ID0gc3RhcnRYICsgKGkgKiBzdGVwTGVuZ3RoKTsKICAgICAgICAKICAgICAgICBpZiAoY3VycmVudE51bSA9PT0gMCkgewogICAgICAgICAgICBjdHguc3Ryb2tlU3R5bGUgPSAnI2ZmNDc1Nyc7CiAgICAgICAgICAgIGN0eC5saW5lV2lkdGggPSAzLjU7CiAgICAgICAgICAgIGN0eC5iZWdpblBhdGgoKTsgY3R4Lm1vdmVUbyh4LCBjZW50ZXJZIC0gMTQpOyBjdHgubGluZVRvKHgsIGNlbnRlclkgKyAxNCk7IGN0eC5zdHJva2UoKTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICBjdHguc3Ryb2tlU3R5bGUgPSAnI2IyYmVjMyc7CiAgICAgICAgICAgIGN0eC5saW5lV2lkdGggPSAyOwogICAgICAgICAgICBjdHguYmVnaW5QYXRoKCk7IGN0eC5tb3ZlVG8oeCwgY2VudGVyWSAtIDgpOyBjdHgubGluZVRvKHgsIGNlbnRlclkgKyA4KTsgY3R4LnN0cm9rZSgpOwogICAgICAgIH0KICAgICAgICAKICAgICAgICBpZiAoY3VycmVudE51bSA9PT0gMCB8fCBjdXJyZW50TnVtID09PSBtaW5WYWwgfHwgY3VycmVudE51bSA9PT0gbWF4VmFsIHx8IGN1cnJlbnROdW0gJSA1ID09PSAwKSB7CiAgICAgICAgICAgIGN0eC5maWxsU3R5bGUgPSAoY3VycmVudE51bSA9PT0gMCkgPyAnI2ZmNDc1NycgOiAnIzYzNmU3Mic7CiAgICAgICAgICAgIGN0eC5mb250ID0gJ2JvbGQgMTNweCAiU2Vnb2UgVUkiLCBBcmlhbCc7CiAgICAgICAgICAgIGN0eC50ZXh0QWxpZ24gPSAnY2VudGVyJzsKICAgICAgICAgICAgY3R4LmZpbGxUZXh0KGN1cnJlbnROdW0sIHgsIGNlbnRlclkgKyAzMik7CiAgICAgICAgfQogICAgfQogICAgCiAgICBwbGFjZWROdW1iZXJzLmZvckVhY2goaXRlbSA9PiB7CiAgICAgICAgY29uc3QgeCA9IHN0YXJ0WCArICgoaXRlbS5udW0gLSBtaW5WYWwpICogc3RlcExlbmd0aCk7CiAgICAgICAgY3R4LmJlZ2luUGF0aCgpOwogICAgICAgIGN0eC5hcmMoeCwgY2VudGVyWSwgOCwgMCwgMiAqIE1hdGguUEkpOwogICAgICAgIGN0eC5maWxsU3R5bGUgPSAnIzAwYjg5NCc7CiAgICAgICAgY3R4LmZpbGwoKTsKICAgICAgICBjdHgubGluZVdpZHRoID0gMjsKICAgICAgICBjdHguc3Ryb2tlU3R5bGUgPSAnI2ZmZic7CiAgICAgICAgY3R4LnN0cm9rZSgpOwogICAgICAgIAogICAgICAgIGN0eC5maWxsU3R5bGUgPSAnIzAwYjg5NCc7CiAgICAgICAgY3R4LmZvbnQgPSAnYm9sZCAxNXB4ICJTZWdvZSBVSSIsIEFyaWFsJzsKICAgICAgICBjdHguZmlsbFRleHQoaXRlbS5udW0sIHgsIGNlbnRlclkgLSAxOCk7CiAgICB9KTsKfQoKZnVuY3Rpb24gaW5pdEdhbWUoKSB7CiAgICBjb25zdCBhbGxOdW1iZXJzID0gQXJyYXkuZnJvbSh7bGVuZ3RoOiAyM30sIChfLCBpKSA9PiBpIC0gMTEpOwogICAgbnVtYmVyc1RvQXNrID0gYWxsTnVtYmVycy5zb3J0KCgpID0+IE1hdGgucmFuZG9tKCkgLSAwLjUpLnNsaWNlKDAsIDQpOwogICAgCiAgICBjdXJyZW50VGFyZ2V0SW5kZXggPSAwOwogICAgc2NvcmUgPSAwOwogICAgcGxhY2VkTnVtYmVycyA9IFtdOwogICAgCiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYm94Q29udGVudCcpLmlubmVySFRNTCA9IGDYp9mE2YXYt9mE2YjYqCDYqtit2K/ZitivINin2YTYsdmC2YU6IDxzcGFuIGNsYXNzPSJ0YXJnZXQtbnVtIiBpZD0iY3VycmVudFRhc2siPi0tPC9zcGFuPmA7CiAgICAKICAgIHVwZGF0ZVVJKCk7CiAgICBkcmF3KCk7Cn0KCmZ1bmN0aW9uIHVwZGF0ZVVJKCkgewogICAgY29uc3QgdGFza1dvcmQgPSBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnY3VycmVudFRhc2snKTsKICAgIGlmIChjdXJyZW50VGFyZ2V0SW5kZXggPCBudW1iZXJzVG9Bc2subGVuZ3RoKSB7CiAgICAgICAgaWYodGFza1dvcmQpIHsKICAgICAgICAgICAgdGFza1dvcmQuaW5uZXJUZXh0ID0gbnVtYmVyc1RvQXNrW2N1cnJlbnRUYXJnZXRJbmRleF07CiAgICAgICAgfQogICAgfSBlbHNlIHsKICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYm94Q29udGVudCcpLmlubmVySFRNTCA9ICLwn46JINmF2YXYqtin2LIhINij2YPZhdmE2Kog2KrZhdir2YrZhCDYp9mE2YAgNCDYo9ix2YLYp9mFINio2YbYrNin2K0hIjsKICAgIH0KICAgIGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCdzY29yZVRleHQnKS5pbm5lclRleHQgPSBg2KfZhNmG2YLYp9i3OiAke3Njb3JlfSAvIDRgOwp9CgpmdW5jdGlvbiBoYW5kbGVJbnRlcmFjdGlvbihjbGllbnRYKSB7CiAgICBpZiAoY3VycmVudFRhcmdldEluZGV4ID49IG51bWJlcnNUb0Fzay5sZW5ndGgpIHJldHVybjsKICAgIAogICAgY29uc3QgcmVjdCA9IGNhbnZhcy5nZXRCb3VuZGluZ0NsaWVudFJlY3QoKTsKICAgIGNvbnN0IGNhbnZhc1ggPSAoY2xpZW50WCAtIHJlY3QubGVmdCkgKiAoY2FudmFzLndpZHRoIC8gcmVjdC53aWR0aCk7CiAgICAKICAgIGNvbnN0IHN0YXJ0WCA9IHBhZGRpbmc7CiAgICBjb25zdCBlbmRYID0gY2FudmFzLndpZHRoIC0gcGFkZGluZzsKICAgIGNvbnN0IHRvdGFsU3RlcHMgPSBtYXhWYWwgLSBtaW5WYWw7CiAgICBjb25zdCBzdGVwTGVuZ3RoID0gKGVuZFggLSBzdGFydFgpIC8gdG90YWxTdGVwczsKICAgIAogICAgY29uc3QgdGFyZ2V0TnVtID0gbnVtYmVyc1RvQXNrW2N1cnJlbnRUYXJnZXRJbmRleF07CiAgICAKICAgIGxldCBjbG9zZXN0TnVtID0gbWluVmFsOwogICAgbGV0IG1pbkRpc3RhbmNlID0gSW5maW5pdHk7CiAgICAKICAgIGZvciAobGV0IGkgPSAwOyBpIDw9IHRvdGFsU3RlcHM7IGkrKykgewogICAgICAgIGNvbnN0IGN1cnJlbnROdW0gPSBtaW5WYWwgKyBpOwogICAgICAgIGNvbnN0IHggPSBzdGFydFggKyAoaSAqIHN0ZXBMZW5ndGgpOwogICAgICAgIGNvbnN0IGRpc3QgPSBNYXRoLmFicyhjYW52YXNYIC0geCk7CiAgICAgICAgaWYgKGRpc3QgPCBtaW5EaXN0YW5jZSkgewogICAgICAgICAgICBtaW5EaXN0YW5jZSA9IGRpc3Q7CiAgICAgICAgICAgIGNsb3Nlc3ROdW0gPSBjdXJyZW50TnVtOwogICAgICAgIH0KICAgIH0KICAgIAogICAgaWYgKGNsb3Nlc3ROdW0gPT09IHRhcmdldE51bSAmJiBtaW5EaXN0YW5jZSA8IChzdGVwTGVuZ3RoICogMC44KSkgewogICAgICAgIHBsYWNlZE51bWJlcnMucHVzaCh7bnVtOiB0YXJnZXROdW19KTsKICAgICAgICBzY29yZSsrOwogICAgICAgIGN1cnJlbnRUYXJnZXRJbmRleCsrOwogICAgICAgIHVwZGF0ZVVJKCk7CiAgICAgICAgZHJhdygpOwogICAgfSBlbHNlIHsKICAgICAgICBhbGVydCgi2KfZhNil2KzYp9io2Kkg2LrZitixINi12K3Zitit2KnYjCDYrdin2YjZhCDYp9mE2KrYsdmD2YrYsiDZiNin2YTYudivINmF2KzYr9iv2KfZiyDZhdmGINin2YTYtdmB2LEhIik7CiAgICB9Cn0KCmNhbnZhcy5hZGRFdmVudExpc3RlbmVyKCdtb3VzZWRvd24nLCAoZSkgPT4gaGFuZGxlSW50ZXJhY3Rpb24oZS5jbGllbnRYKSk7CmNhbnZhcy5hZGRFdmVudExpc3RlbmVyKCd0b3VjaHN0YXJ0JywgKGUpID0+IHsKICAgIGUucHJldmVudERlZmF1bHQoKTsKICAgIGhhbmRsZUludGVyYWN0aW9uKGUudG91Y2hlc1swXS5jbGllbnRYKTsKfSwgeyBwYXNzaXZlOiBmYWxzZSB9KTsKCmluaXRHYW1lKCk7Cjwvc2NyaXB0PgoKPC9ib2R5Pgo8L2h0bWw+"
+            }
+        ]
+    }
+];
+    let customPlatformData = defaultPlatformData;
+
+    try {
+        let saved = localStorage.getItem('customPlatformStorageSafe');
+        if (saved) {
+            let parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].name) {
+                customPlatformData = parsed;
+            } else {
+                localStorage.removeItem('customPlatformStorageSafe');
+            }
+        }
+    } catch(e) {
+        localStorage.removeItem('customPlatformStorageSafe');
+    }
+
+    let currentView = 'chaptersList', selChap = 0, selTopic = 0;
+    let isAdminMode = false;
+    let showLoginBox = false;
+    const ADMIN_PASS = "1234";
+
+    let editingTopicIndex = null;
+
+    function saveToStorage() {
+        try {
+            localStorage.setItem('customPlatformStorageSafe', JSON.stringify(customPlatformData));
+        } catch(e) {}
+        render();
+    }
+
+    function resetStorageData() {
+        if (confirm('هل أنت متأكد من إعادة ضبط المصنع ومسح البيانات التالفة؟')) {
+            localStorage.removeItem('customPlatformStorageSafe');
+            customPlatformData = defaultPlatformData;
+            isAdminMode = false;
+            showLoginBox = false;
+            currentView = 'chaptersList';
+            render();
+            alert('تم مسح الذاكرة وإعادة الضبط بنجاح!');
+        }
+    }
+
+    function toggleAdminLogin() {
+        if (isAdminMode) {
+            isAdminMode = false;
+            showLoginBox = false;
+            render();
+        } else {
+            showLoginBox = !showLoginBox;
+            render();
+        }
+    }
+
+    function verifyMobilePassword() {
+        let passInput = document.getElementById('mobile-admin-pass');
+        if (passInput && passInput.value === ADMIN_PASS) {
+            isAdminMode = true;
+            showLoginBox = false;
+            render();
+        } else {
+            alert("كلمة المرور غير صحيحة!");
+        }
+    }
+
+    function exportFile() {
+        let htmlContent = document.documentElement.outerHTML;
+        let newScript = `let defaultPlatformData = ${JSON.stringify(customPlatformData, null, 4)};\n    let customPlatformData = defaultPlatformData;`;
+        htmlContent = htmlContent.replace(/let defaultPlatformData = \[[\s\S]*?\];\s*let customPlatformData = defaultPlatformData;/, newScript);
+
+        let blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+        let url = URL.createObjectURL(blob);
+        let a = document.createElement('a');
+        a.href = url; a.download = 'index.html';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        alert('تم تصدير ملف المشروع البرمجي المحدث بالكامل بنجاح!');
+    }
+
+    function render() {
+        const app = document.getElementById('app');
+        if (!app) return;
+
+        let topBar = `
+            <div class="top-bar">
+                <span>وضع العرض: <strong>${isAdminMode ? '🔓 وضع الإدارة (مفعل)' : '🔒 وضع الاستعراض (آمن)'}</strong></span>
+                <button class="admin-login-btn ${isAdminMode ? 'active' : ''}" onclick="toggleAdminLogin()">
+                    ${isAdminMode ? 'خروج من الإدارة 🔒' : 'دخول الإدارة ⚙️'}
+                </button>
+            </div>
+            
+            <div class="login-box-mobile" style="display: ${showLoginBox && !isAdminMode ? 'flex' : 'none'};">
+                <input type="password" id="mobile-admin-pass" placeholder="أدخل كلمة المرور (1234)">
+                <button onclick="verifyMobilePassword()">دخول</button>
+            </div>
+        `;
+
+        if (isAdminMode) {
+            topBar += `<button class="reset-storage-btn" onclick="resetStorageData()">🔄 إعادة ضبط المصنع (مسح الذاكرة التالفة)</button>`;
+        }
+
+        if (currentView === 'chaptersList') {
+            let html = topBar + `
+                <div class="header-title-box">
+                    <h2>قائمة الفصول الدراسية</h2>
+                    <p>اختر الفصل لتصفح المواضيع والأكواد التفاعلية</p>
+                </div>`;
+            
+            customPlatformData.forEach((chap, idx) => {
+                let grad = `gradient-${(idx % 6) + 1}`;
+                html += `
+                    <div class="big-card ${grad}" onclick="selChap=${idx}; currentView='topicsList'; render();">
+                        <div class="card-title">📚 ${chap.name}</div>
+                        <div class="card-subtitle">عدد المواضيع: ${chap.topics ? chap.topics.length : 0}</div>`;
+                if (isAdminMode) {
+                    html += `
+                        <div class="admin-action-row" onclick="event.stopPropagation()">
+                            <button class="delete-btn-card" onclick="deleteChapter(${idx})">حذف الفصل</button>
+                        </div>`;
+                }
+                html += `</div>`;
+            });
+
+            if (isAdminMode) {
+                html += `
+                    <div class="admin-panel">
+                        <h3>➕ إضافة فصل جديد</h3>
+                        <input id="new-chap-name" placeholder="اسم الفصل الجديد (مثلاً: الفصل الثاني: الكسور)">
+                        <button class="admin-btn" onclick="addChapter()">إضافة الفصل للمنصة</button>
+                        <button class="export-btn" onclick="exportFile()">📥 تصدير الكود المحدث بالكامل كملف HTML</button>
+                    </div>`;
+            }
+            app.innerHTML = html;
+        }
+        else if (currentView === 'topicsList') {
+            let chap = customPlatformData[selChap];
+            let html = topBar + `
+                <button class="back-btn" onclick="currentView='chaptersList'; render();">← عودة لقائمة الفصول</button>
+                <div class="header-title-box">
+                    <h2>${chap.name}</h2>
+                    <p>اختر الموضوع البرمجي أو التفاعلي للبدء</p>
+                </div>`;
+
+            if (chap.topics && chap.topics.length > 0) {
+                chap.topics.forEach((top, idx) => {
+                    let grad = `gradient-${(idx % 6) + 1}`;
+                    html += `
+                        <div class="big-card ${grad}" onclick="selTopic=${idx}; currentView='viewTopic'; render();">
+                            <div class="card-title">💻 ${top.topName}</div>
+                            <div class="card-subtitle">اضغط لتشغيل صفحة الكود التفاعلي</div>`;
+                    if (isAdminMode) {
+                        html += `
+                            <div class="admin-action-row" onclick="event.stopPropagation()">
+                                <button class="delete-btn-card" style="background:#f59e0b;" onclick="startEditTopic(${idx})">تعديل الموضوع</button>
+                                <button class="delete-btn-card" onclick="deleteTopic(${idx})">حذف الموضوع</button>
+                            </div>`;
+                    }
+                    html += `</div>`;
+                });
+            } else {
+                html += `<p style="text-align:center; color:#94a3b8; background:rgba(30,41,59,0.9); padding:30px; border-radius:16px; border:1px solid rgba(255,255,255,0.1);">لا توجد مواضيع مضافة في هذا الفصل حتى الآن.</p>`;
+            }
+
+            if (isAdminMode) {
+                let editingCodeDecoded = "";
+                if (editingTopicIndex !== null) {
+                    editingCodeDecoded = safeAtob(chap.topics[editingTopicIndex].htmlCode);
+                }
+                html += `
+                    <div class="admin-panel">
+                        <h3>${editingTopicIndex !== null ? '✏️ تعديل موضوع حالي' : '➕ إضافة موضوع جديد بكود HTML مخصص'}</h3>
+                        <input id="form-top-name" value="${editingTopicIndex !== null ? chap.topics[editingTopicIndex].topName : ''}" placeholder="عنوان الموضوع (مثلاً: شرح وتدريب جمع الكسور)">
+                        <textarea id="form-top-code" placeholder="الصق كود الـ HTML / CSS / JS الكامل هنا...">${escapeHtmlForTextarea(editingCodeDecoded)}</textarea>
+                        <button class="admin-btn" onclick="saveTopicForm()">${editingTopicIndex !== null ? 'حفظ التعديلات' : 'إضافة الموضوع للفصل'}</button>
+                        ${editingTopicIndex !== null ? '<button class="delete-btn-card" style="width:100%; padding:10px; margin-bottom:8px; background:#ef4444;" onclick="cancelEdit()">إلغاء التعديل</button>' : ''}
+                        <button class="export-btn" onclick="exportFile()">📥 تصدير الكود المحدث بالكامل كملف HTML</button>
+                    </div>`;
+            }
+            app.innerHTML = html;
+        }
+        else if (currentView === 'viewTopic') {
+            let top = customPlatformData[selChap].topics[selTopic];
+            let decodedHtml = safeAtob(top.htmlCode);
+            let html = topBar + `
+                <button class="back-btn" onclick="currentView='topicsList'; render();">← عودة لقائمة المواضيع</button>
+                <div class="header-title-box" style="margin-bottom:12px;">
+                    <h2>${top.topName}</h2>
+                </div>`;
+
+            // استخدام srcdoc مع فك التشفير الآمن تماماً لعرض أكواد الاختبارات الكبيرة والمعقدة على الموبايل
+            html += `<iframe class="code-viewer-container" srcdoc="${escapeHtml(decodedHtml)}"></iframe>`;
+
+            app.innerHTML = html;
+        }
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function escapeHtmlForTextarea(text) {
+        return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function addChapter() {
+        let name = document.getElementById('new-chap-name').value.trim();
+        if (!name) { alert('يرجى كتابة اسم الفصل.'); return; }
+        customPlatformData.push({ name: name, topics: [] });
+        saveToStorage();
+    }
+
+    function deleteChapter(idx) {
+        if (confirm('حذف الفصل سيقوم بحذف جميع المواضيع التابعة له. هل أنت متأكد؟')) {
+            customPlatformData.splice(idx, 1);
+            saveToStorage();
+        }
+    }
+
+    function startEditTopic(idx) {
+        editingTopicIndex = idx;
+        render();
+    }
+
+    function cancelEdit() {
+        editingTopicIndex = null;
+        render();
+    }
+
+    function saveTopicForm() {
+        let name = document.getElementById('form-top-name').value.trim();
+        let rawCode = document.getElementById('form-top-code').value;
+        if (!name || !rawCode) { alert('يرجى كتابة عنوان الموضوع وإلصاق الكود البرمجي.'); return; }
+
+        let encodedCode = safeBtoa(rawCode);
+        let chap = customPlatformData[selChap];
+        if (!chap.topics) chap.topics = [];
+
+        if (editingTopicIndex !== null) {
+            chap.topics[editingTopicIndex].topName = name;
+            chap.topics[editingTopicIndex].htmlCode = encodedCode;
+            editingTopicIndex = null;
+        } else {
+            chap.topics.push({ topName: name, htmlCode: encodedCode });
+        }
+        saveToStorage();
+    }
+
+    function deleteTopic(idx) {
+        if (confirm('هل أنت متأكد من حذف هذا الموضوع؟')) {
+            customPlatformData[selChap].topics.splice(idx, 1);
+            if (editingTopicIndex === idx) editingTopicIndex = null;
+            saveToStorage();
+        }
+    }
+
+    render();
+</script>
+
+</body></html>
